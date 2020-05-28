@@ -57,14 +57,33 @@ st.write(pdk.Deck(
         ),
     ],
 ))
-if st.checkbox("Show Moth Data", False):
+if st.checkbox("Show Data - months cases", False):
     st.subheader('Data')
-    st.write(data.shape)
+    st.write("Number of cases: %i" % data.shape[0])
     st.write(data)
 
 
-# recovered vs fatality vs all
-st.header("Recoveries and Fatalities")
-selection = st.selectbox("Show", ["All", "Recoveries", "Fatalities"])
-st.markdown(selection)
+
+# # recovered vs fatality vs all
+# st.header("Recoveries and Fatalities")
+# recover = confirmed[confirmed.Deaths == 0]
+# die = confirmed[confirmed.Deaths == 1]
+
+# st.write(recover)
+
+# selection = st.selectbox("Show", ["All", "Recoveries", "Fatalities"])
+# if selection == "Fatalities":
+#     pass
+
+# if st.checkbox("Show Data - %i" % selection, False):
+#     st.subheader('Data')
+#     if selection == "Recoveries":
+#         st.write(recover.shape[0])
+#         st.write(recover)
+#     elif selection == "Fatalities":
+#         st.write(die.shape[0])
+#         st.write(die)
+#         st.write(die)
+
+
 # data = df[df['Date'].dt.month == month]
