@@ -1,2 +1,2 @@
 # Covid19-Visualization
-Visualizations of Covid-19 spread using streamlit and pydeck
+A web app for visualizing the Covid-19 virus in the USA - built using streamlit and pydeck
