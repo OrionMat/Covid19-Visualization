@@ -14,17 +14,17 @@ def load_data(NROWS):
 
     # rename for streamlit map to work
     df.rename(columns={'Lat' : 'latitude', 'Long_' : 'longitude'}, inplace=True)
-    return df
+    confirmed = df[df.Confirmed != 0]
+    return df, confirmed
 
-df = load_data(NROWS)
-confirmed = df[df.Confirmed != 0]
+df, confirmed = load_data(NROWS)
 
 st.title("Covid-19 cases in the USA")
 
 # all 2020 confirmed case map
 st.header("All confirmed 2020 cases")
 st.map(confirmed[["latitude", "longitude"]].dropna(how="any"))
-if st.checkbox("Show Data - confirmed cases", False):
+if st.checkbox("Show Data - 162268 confirmed cases", False):
     st.subheader('Data')
     st.write(confirmed)
 
