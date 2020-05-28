@@ -30,7 +30,7 @@ if st.checkbox("Show Data - 162268 confirmed cases", False):
 
 # confirmed cases for given month
 st.header("Cases in a given month")
-month = st.slider("con Month", 1, 5)
+month = st.slider("Select Month", 1, 5)
 st.markdown("Covid-19 cases in 0%i/2020" % month)
 data = confirmed[confirmed['Date'].dt.month == month]
 
@@ -65,7 +65,7 @@ if st.checkbox("Show Data - months cases", False):
 
 
 # recovered vs fatality vs all
-st.header("All recoveries and Fatalities")
+st.header("Recoveries and Fatalities")
 recover = confirmed[confirmed.Deaths == 0]
 die = confirmed[confirmed.Deaths == 1]
 
@@ -146,18 +146,16 @@ else:
         ],
     ))
 
+st.write("Number of cases: %i" % confirmed.shape[0])
+st.write("Number of recoveries: %i" % recover.shape[0])
+st.write("Number of deaths: %i" % die.shape[0])
 
 if st.checkbox("Show Data - %s" % selection, False):
     st.subheader('Data')
     if selection == "Recoveries":
-        st.write("Number of recoveries: %i" % recover.shape[0])
         st.write(recover)
     elif selection == "Fatalities":
         st.write("Number of deaths: %i" % die.shape[0])
         st.write(die)
     else:
-        st.write("Number of deaths: %i" % confirmed.shape[0])
         st.write(confirmed)
-
-
-data = df[df['Date'].dt.month == month]
