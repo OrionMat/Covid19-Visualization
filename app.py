@@ -64,26 +64,71 @@ if st.checkbox("Show Data - months cases", False):
 
 
 
-# # recovered vs fatality vs all
-# st.header("Recoveries and Fatalities")
-# recover = confirmed[confirmed.Deaths == 0]
-# die = confirmed[confirmed.Deaths == 1]
+# recovered vs fatality vs all
+st.header("Recoveries and Fatalities")
+recover = confirmed[confirmed.Deaths == 0]
+die = confirmed[confirmed.Deaths == 1]
 
-# st.write(recover)
+selection = st.selectbox("Show", ["Recoveries", "Fatalities", "All"])
+if selection == "Recoveries":
+    rec_midpoint = (np.average(recover["latitude"]), np.average(recover["longitude"]))
+    st.write(pdk.Deck(
+        map_style="mapbox://styles/mapbox/light-v9",
+        initial_view_state={
+            "latitude": rec_midpoint[0],
+            "longitude": rec_midpoint[1],
+            "zoom": 2,
+            "pitch": 0,
+        },
+        layers=[
+            pdk.Layer(
+            "ScatterplotLayer",
+            data=recover[['Date', 'latitude', 'longitude']],
+            get_position=["longitude", "latitude"],
+            auto_highlight=False,
+            get_radius=50000,
+            get_fill_color=[9, 239, 9, 200],  # Set an RGBA value for fill
+            pickable=True,
+            ),
+        ],
+    ))
+elif selection == "Fatalities":
+    die_midpoint = (np.average(die["latitude"]), np.average(die["longitude"]))
+    st.write(pdk.Deck(
+        map_style="mapbox://styles/mapbox/light-v9",
+        initial_view_state={
+            "latitude": die_midpoint[0],
+            "longitude": die_midpoint[1],
+            "zoom": 2,
+            "pitch": 0,
+        },
+        layers=[
+            pdk.Layer(
+            "ScatterplotLayer",
+            data=die[['Date', 'latitude', 'longitude']],
+            get_position=["longitude", "latitude"],
+            auto_highlight=False,
+            get_radius=50000,
+            get_fill_color=[239, 9, 9, 200],  # Set an RGBA value for fill
+            pickable=True,
+            ),
+        ],
+    ))
+else:
+    pass
 
-# selection = st.selectbox("Show", ["All", "Recoveries", "Fatalities"])
-# if selection == "Fatalities":
-#     pass
 
-# if st.checkbox("Show Data - %i" % selection, False):
-#     st.subheader('Data')
-#     if selection == "Recoveries":
-#         st.write(recover.shape[0])
-#         st.write(recover)
-#     elif selection == "Fatalities":
-#         st.write(die.shape[0])
-#         st.write(die)
-#         st.write(die)
+if st.checkbox("Show Data - %s" % selection, False):
+    st.subheader('Data')
+    if selection == "Recoveries":
+        st.write("Number of recoveries: %i" % recover.shape[0])
+        st.write(recover)
+    elif selection == "Fatalities":
+        st.write("Number of deaths: %i" % die.shape[0])
+        st.write(die)
+    else:
+        st.write("Number of deaths: %i" % confirmed.shape[0])
+        st.write(confirmed)
 
 
-# data = df[df['Date'].dt.month == month]
+data = df[df['Date'].dt.month == month]
