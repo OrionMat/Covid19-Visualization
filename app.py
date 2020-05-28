@@ -65,11 +65,11 @@ if st.checkbox("Show Data - months cases", False):
 
 
 # recovered vs fatality vs all
-st.header("Recoveries and Fatalities")
+st.header("All recoveries and Fatalities")
 recover = confirmed[confirmed.Deaths == 0]
 die = confirmed[confirmed.Deaths == 1]
 
-selection = st.selectbox("Show", ["Recoveries", "Fatalities", "All"])
+selection = st.selectbox("Show", ["All", "Recoveries", "Fatalities"])
 if selection == "Recoveries":
     rec_midpoint = (np.average(recover["latitude"]), np.average(recover["longitude"]))
     st.write(pdk.Deck(
@@ -87,7 +87,7 @@ if selection == "Recoveries":
             get_position=["longitude", "latitude"],
             auto_highlight=False,
             get_radius=50000,
-            get_fill_color=[9, 239, 9, 200],  # Set an RGBA value for fill
+            get_fill_color=[9, 239, 9, 200],
             pickable=True,
             ),
         ],
@@ -109,13 +109,42 @@ elif selection == "Fatalities":
             get_position=["longitude", "latitude"],
             auto_highlight=False,
             get_radius=50000,
-            get_fill_color=[239, 9, 9, 200],  # Set an RGBA value for fill
+            get_fill_color=[239, 9, 9, 200],
             pickable=True,
             ),
         ],
     ))
 else:
-    pass
+    st.write(pdk.Deck(
+        map_style="mapbox://styles/mapbox/light-v9",
+        initial_view_state={
+            "latitude": midpoint[0],
+            "longitude": midpoint[1],
+            "zoom": 2,
+            "pitch": 0,
+        },
+        layers=[
+            pdk.Layer(
+            "ScatterplotLayer",
+            data=recover[['Date', 'latitude', 'longitude']],
+            get_position=["longitude", "latitude"],
+            auto_highlight=False,
+            get_radius=50000,
+            get_fill_color=[9, 239, 9, 10],
+            pickable=True,
+            ),
+
+            pdk.Layer(
+            "ScatterplotLayer",
+            data=die[['Date', 'latitude', 'longitude']],
+            get_position=["longitude", "latitude"],
+            auto_highlight=False,
+            get_radius=50000,
+            get_fill_color=[239, 9, 9, 10],
+            pickable=True,
+            ),
+        ],
+    ))
 
 
 if st.checkbox("Show Data - %s" % selection, False):
