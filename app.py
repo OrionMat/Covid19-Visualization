@@ -7,7 +7,7 @@ NROWS = None
 
 @st.cache
 def load_data(NROWS):
-    df = pd.read_csv("covid19//usa_county_wise.csv", nrows=NROWS, parse_dates=['Date'])
+    df = pd.read_csv("covid19_data//USA.csv", nrows=NROWS, parse_dates=['Date'])
     df.drop(columns=['Combined_Key', 'Country_Region', 'Admin2', 'FIPS', 'code3', 'iso3', 'UID'], inplace=True)
     # df = df[df.Province_State == 'New York']
     df = df[df.Long_ <= -40]
