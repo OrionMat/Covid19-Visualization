@@ -12,29 +12,27 @@ def load_data(NROWS):
     # df = df[df.Province_State == 'New York']
     df = df[df.Long_ <= -40]
 
-
     # rename for streamlit map to work
     df.rename(columns={'Lat' : 'latitude', 'Long_' : 'longitude'}, inplace=True)
     return df
 
 df = load_data(NROWS)
+confirmed = df[df.Confirmed != 0]
 
 st.title("Covid-19 cases in the USA")
 
-# all 2020 case map
-st.header("All 2020 cases")
-st.map(df[["latitude", "longitude"]].dropna(how="any"))
-if st.checkbox("Show All Data", False):
+# all 2020 confirmed case map
+st.header("All confirmed 2020 cases")
+st.map(confirmed[["latitude", "longitude"]].dropna(how="any"))
+if st.checkbox("Show Data - confirmed cases", False):
     st.subheader('Data')
-    st.write(df)
+    st.write(confirmed)
 
-
-
-# cases for given month
-st.header("Cases in a given month (Jan-01 to May-05 2020)")
-month = st.slider("Month", 1, 5)
+# confirmed cases for given month
+st.header("Cases in a given month")
+month = st.slider("con Month", 1, 5)
 st.markdown("Covid-19 cases in 0%i/2020" % month)
-data = df[df['Date'].dt.month == month]
+data = confirmed[confirmed['Date'].dt.month == month]
 
 midpoint = (np.average(data["latitude"]), np.average(data["longitude"]))
 st.write(pdk.Deck(
@@ -63,3 +61,10 @@ if st.checkbox("Show Moth Data", False):
     st.subheader('Data')
     st.write(data.shape)
     st.write(data)
+
+
+# recovered vs fatality vs all
+st.header("Recoveries and Fatalities")
+selection = st.selectbox("Show", ["All", "Recoveries", "Fatalities"])
+st.markdown(selection)
+# data = df[df['Date'].dt.month == month]
